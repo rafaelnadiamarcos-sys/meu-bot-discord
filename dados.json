@@ -1,0 +1,10 @@
+{
+    "horarios": {
+        "10:00": {
+            "fuso": "America/Sao_Paulo",
+            "responsavel": null
+        }
+    },
+    "canal_avisos": null,
+    "pontos": {}
+}

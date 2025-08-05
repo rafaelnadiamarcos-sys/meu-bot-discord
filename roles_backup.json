@@ -1,0 +1,758 @@
+[
+  {
+    "id": 1402366289812389901,
+    "name": "VNP | Staff",
+    "permissions": 8,
+    "color": 0,
+    "hoist": false,
+    "mentionable": false,
+    "position": 1
+  },
+  {
+    "id": 1395784646884855965,
+    "name": "Instrutor",
+    "permissions": 0,
+    "color": 6323595,
+    "hoist": false,
+    "mentionable": false,
+    "position": 2
+  },
+  {
+    "id": 1395784646884855966,
+    "name": "──────▸⎾Condecorações⏌◂───────",
+    "permissions": 0,
+    "color": 16777215,
+    "hoist": false,
+    "mentionable": false,
+    "position": 3
+  },
+  {
+    "id": 1395784646884855967,
+    "name": ".",
+    "permissions": 0,
+    "color": 0,
+    "hoist": false,
+    "mentionable": false,
+    "position": 4
+  },
+  {
+    "id": 1395784646884855968,
+    "name": "C-RONE | Curso de Rondas Ostensivas de Natureza Especial",
+    "permissions": 0,
+    "color": 16777215,
+    "hoist": false,
+    "mentionable": false,
+    "position": 5
+  },
+  {
+    "id": 1395784646884855969,
+    "name": "CCVPT | Curso de Capacitação em Condução de Viatura de Patrulhamento Tático",
+    "permissions": 0,
+    "color": 15158332,
+    "hoist": false,
+    "mentionable": false,
+    "position": 6
+  },
+  {
+    "id": 1395784647295893634,
+    "name": "CCPAR | Curso de Capacitação em Patrulha de Alto Risco",
+    "permissions": 0,
+    "color": 15844367,
+    "hoist": false,
+    "mentionable": false,
+    "position": 7
+  },
+  {
+    "id": 1395784647295893635,
+    "name": "──────▸⎾Cursos⏌◂───────",
+    "permissions": 0,
+    "color": 1179903,
+    "hoist": false,
+    "mentionable": false,
+    "position": 8
+  },
+  {
+    "id": 1395784647295893636,
+    "name": "──────▸⎾Guarnições⏌◂───────",
+    "permissions": 0,
+    "color": 3447003,
+    "hoist": false,
+    "mentionable": false,
+    "position": 9
+  },
+  {
+    "id": 1395784647295893637,
+    "name": "☠ C.O.E. | Comandos e Operações Especiais",
+    "permissions": 1720707884371521,
+    "color": 526344,
+    "hoist": true,
+    "mentionable": true,
+    "position": 10
+  },
+  {
+    "id": 1395784647295893638,
+    "name": "Responsável C.O.E.",
+    "permissions": 1720707884371521,
+    "color": 6323595,
+    "hoist": true,
+    "mentionable": true,
+    "position": 11
+  },
+  {
+    "id": 1395784647295893639,
+    "name": "──────▸⎾C.O.E.⏌◂───────",
+    "permissions": 0,
+    "color": 15001834,
+    "hoist": false,
+    "mentionable": false,
+    "position": 12
+  },
+  {
+    "id": 1395784647295893640,
+    "name": "✈ S.C.O.R | Seção de Combate Operacional Rápido",
+    "permissions": 0,
+    "color": 5047043,
+    "hoist": false,
+    "mentionable": false,
+    "position": 13
+  },
+  {
+    "id": 1395784647295893641,
+    "name": "Responsável S.C.O.R.",
+    "permissions": 0,
+    "color": 0,
+    "hoist": false,
+    "mentionable": false,
+    "position": 14
+  },
+  {
+    "id": 1395784647295893642,
+    "name": "──────▸⎾S.C.O.R.⏌◂───────",
+    "permissions": 0,
+    "color": 0,
+    "hoist": false,
+    "mentionable": false,
+    "position": 15
+  },
+  {
+    "id": 1395784647295893643,
+    "name": "💀 | Black list",
+    "permissions": 0,
+    "color": 67855,
+    "hoist": false,
+    "mentionable": false,
+    "position": 16
+  },
+  {
+    "id": 1395784647316602890,
+    "name": "⛔️ | Aviso Verbal",
+    "permissions": 0,
+    "color": 6488064,
+    "hoist": false,
+    "mentionable": false,
+    "position": 17
+  },
+  {
+    "id": 1395784647316602891,
+    "name": "🚫 | Afastamento",
+    "permissions": 0,
+    "color": 10038562,
+    "hoist": false,
+    "mentionable": false,
+    "position": 18
+  },
+  {
+    "id": 1395784647316602892,
+    "name": "🎒 | 3º Advertência",
+    "permissions": 0,
+    "color": 10038562,
+    "hoist": false,
+    "mentionable": false,
+    "position": 19
+  },
+  {
+    "id": 1395784647316602893,
+    "name": "🎒 | 2º Advertência",
+    "permissions": 0,
+    "color": 10038562,
+    "hoist": false,
+    "mentionable": false,
+    "position": 20
+  },
+  {
+    "id": 1395784647316602894,
+    "name": "🎒 | 1º Advertência",
+    "permissions": 0,
+    "color": 10038562,
+    "hoist": false,
+    "mentionable": false,
+    "position": 21
+  },
+  {
+    "id": 1395784647316602895,
+    "name": "──────▸⎾ADV⏌◂───────",
+    "permissions": 0,
+    "color": 15158332,
+    "hoist": false,
+    "mentionable": false,
+    "position": 22
+  },
+  {
+    "id": 1395784647316602896,
+    "name": "「🏅」Medalha De Campeão JIrone",
+    "permissions": 0,
+    "color": 12745742,
+    "hoist": false,
+    "mentionable": false,
+    "position": 23
+  },
+  {
+    "id": 1395784647316602897,
+    "name": "「🏅」Medalha De Invasão",
+    "permissions": 0,
+    "color": 12745742,
+    "hoist": false,
+    "mentionable": false,
+    "position": 24
+  },
+  {
+    "id": 1395784647316602898,
+    "name": "「🏅」Medalha De Treino",
+    "permissions": 0,
+    "color": 12745742,
+    "hoist": false,
+    "mentionable": false,
+    "position": 25
+  },
+  {
+    "id": 1395784647316602899,
+    "name": "「🏅」Medalha De Recrutamento",
+    "permissions": 0,
+    "color": 12745742,
+    "hoist": false,
+    "mentionable": false,
+    "position": 26
+  },
+  {
+    "id": 1395784647333511229,
+    "name": "「🏅」Medalha De Antiguidade",
+    "permissions": 0,
+    "color": 12745742,
+    "hoist": false,
+    "mentionable": false,
+    "position": 27
+  },
+  {
+    "id": 1395784647333511230,
+    "name": "「🏅」Medalha De História",
+    "permissions": 0,
+    "color": 12745742,
+    "hoist": false,
+    "mentionable": false,
+    "position": 28
+  },
+  {
+    "id": 1395784647333511231,
+    "name": "「🏅」Medalha De Honra Ao Cargo",
+    "permissions": 0,
+    "color": 12745742,
+    "hoist": false,
+    "mentionable": false,
+    "position": 29
+  },
+  {
+    "id": 1395784647333511232,
+    "name": "「🏅」Medalha De P1",
+    "permissions": 0,
+    "color": 12745742,
+    "hoist": false,
+    "mentionable": false,
+    "position": 30
+  },
+  {
+    "id": 1395784647333511233,
+    "name": "「🏅」Medalha De Mérito",
+    "permissions": 0,
+    "color": 12745742,
+    "hoist": false,
+    "mentionable": false,
+    "position": 31
+  },
+  {
+    "id": 1395784647333511234,
+    "name": "──────▸⎾MDLH⏌◂───────",
+    "permissions": 0,
+    "color": 15844367,
+    "hoist": false,
+    "mentionable": false,
+    "position": 32
+  },
+  {
+    "id": 1395784647333511235,
+    "name": "📰| Ping Notificação",
+    "permissions": 0,
+    "color": 16777215,
+    "hoist": false,
+    "mentionable": false,
+    "position": 33
+  },
+  {
+    "id": 1395784647333511236,
+    "name": "🪖 | Ping Recrutamento",
+    "permissions": 0,
+    "color": 2067276,
+    "hoist": false,
+    "mentionable": false,
+    "position": 34
+  },
+  {
+    "id": 1395784647333511237,
+    "name": "🚔| Ping Patrulhamento",
+    "permissions": 0,
+    "color": 3447003,
+    "hoist": false,
+    "mentionable": true,
+    "position": 35
+  },
+  {
+    "id": 1395784647333511238,
+    "name": "──────▸⎾PINGS⏌◂───────",
+    "permissions": 0,
+    "color": 16777215,
+    "hoist": false,
+    "mentionable": false,
+    "position": 36
+  },
+  {
+    "id": 1395784647342031079,
+    "name": "「🧑」Cidadão",
+    "permissions": 2197504,
+    "color": 2067276,
+    "hoist": true,
+    "mentionable": true,
+    "position": 37
+  },
+  {
+    "id": 1395784647342031080,
+    "name": "──────▸⎾População⏌◂───────",
+    "permissions": 0,
+    "color": 3066993,
+    "hoist": false,
+    "mentionable": false,
+    "position": 38
+  },
+  {
+    "id": 1395784647342031081,
+    "name": "📂▸ Responsável por Formulários",
+    "permissions": 0,
+    "color": 15844367,
+    "hoist": false,
+    "mentionable": false,
+    "position": 39
+  },
+  {
+    "id": 1395784647342031082,
+    "name": "📂▸ Responsável por Treinos",
+    "permissions": 0,
+    "color": 15844367,
+    "hoist": false,
+    "mentionable": false,
+    "position": 40
+  },
+  {
+    "id": 1395784647342031083,
+    "name": "📂▸ Responsável por Avisos",
+    "permissions": 0,
+    "color": 15844367,
+    "hoist": false,
+    "mentionable": false,
+    "position": 41
+  },
+  {
+    "id": 1395784647342031084,
+    "name": "📂▸ Responsável por Promoção",
+    "permissions": 0,
+    "color": 15844367,
+    "hoist": false,
+    "mentionable": false,
+    "position": 42
+  },
+  {
+    "id": 1395784647342031085,
+    "name": "📂▸ Responsável por Demissões",
+    "permissions": 0,
+    "color": 15844367,
+    "hoist": false,
+    "mentionable": false,
+    "position": 43
+  },
+  {
+    "id": 1395784647342031086,
+    "name": "📂▸ Responsável por Relatórios",
+    "permissions": 0,
+    "color": 15844367,
+    "hoist": false,
+    "mentionable": false,
+    "position": 44
+  },
+  {
+    "id": 1395784647342031087,
+    "name": "📂▸ Responsável por Recrutamento",
+    "permissions": 486670336,
+    "color": 15844367,
+    "hoist": false,
+    "mentionable": true,
+    "position": 45
+  },
+  {
+    "id": 1395784647342031088,
+    "name": "📂▸ Responsável por Rebaixamento",
+    "permissions": 0,
+    "color": 15844367,
+    "hoist": false,
+    "mentionable": false,
+    "position": 46
+  },
+  {
+    "id": 1395784647354486946,
+    "name": "──────▸⎾Responsabilidades⏌◂───────",
+    "permissions": 0,
+    "color": 15529078,
+    "hoist": false,
+    "mentionable": false,
+    "position": 47
+  },
+  {
+    "id": 1395784647354486947,
+    "name": "「👮‍♂️」P2 Viatura",
+    "permissions": 0,
+    "color": 2123412,
+    "hoist": false,
+    "mentionable": false,
+    "position": 48
+  },
+  {
+    "id": 1395784647354486948,
+    "name": "「🚓」P1 Viatura",
+    "permissions": 0,
+    "color": 2123412,
+    "hoist": false,
+    "mentionable": false,
+    "position": 49
+  },
+  {
+    "id": 1395784647354486949,
+    "name": "──────▸⎾FNÇ⏌◂───────",
+    "permissions": 0,
+    "color": 0,
+    "hoist": false,
+    "mentionable": false,
+    "position": 50
+  },
+  {
+    "id": 1395784647354486950,
+    "name": "👨‍⚖️ | Governo",
+    "permissions": 0,
+    "color": 15277667,
+    "hoist": true,
+    "mentionable": false,
+    "position": 51
+  },
+  {
+    "id": 1395784647354486951,
+    "name": "🦅 | Rondas Ostensivas de Natureza Especial",
+    "permissions": 0,
+    "color": 197379,
+    "hoist": false,
+    "mentionable": true,
+    "position": 52
+  },
+  {
+    "id": 1395784647354486952,
+    "name": "🤝| Colegas de Farda",
+    "permissions": 31857956998721,
+    "color": 15105570,
+    "hoist": true,
+    "mentionable": false,
+    "position": 53
+  },
+  {
+    "id": 1395784647354486953,
+    "name": "──────▸⎾Empregos⏌◂───────",
+    "permissions": 0,
+    "color": 10092288,
+    "hoist": false,
+    "mentionable": false,
+    "position": 54
+  },
+  {
+    "id": 1395784647354486954,
+    "name": "REC | Recruta",
+    "permissions": 0,
+    "color": 10088868,
+    "hoist": true,
+    "mentionable": false,
+    "position": 55
+  },
+  {
+    "id": 1395784647354486955,
+    "name": "SLD 2° | Soldado 2° Classe",
+    "permissions": 9072044743680,
+    "color": 2067276,
+    "hoist": true,
+    "mentionable": false,
+    "position": 56
+  },
+  {
+    "id": 1395784647371395162,
+    "name": "SLD 1° | Soldado 1° Classe",
+    "permissions": 31858024107585,
+    "color": 2067276,
+    "hoist": true,
+    "mentionable": false,
+    "position": 57
+  },
+  {
+    "id": 1395784647371395163,
+    "name": "CB | Cabo",
+    "permissions": 31858024107585,
+    "color": 2067276,
+    "hoist": true,
+    "mentionable": false,
+    "position": 58
+  },
+  {
+    "id": 1395784647371395164,
+    "name": "⎾Praças⏌",
+    "permissions": 0,
+    "color": 3066993,
+    "hoist": false,
+    "mentionable": false,
+    "position": 59
+  },
+  {
+    "id": 1395784647371395165,
+    "name": "Conselheiro",
+    "permissions": 1024,
+    "color": 2123412,
+    "hoist": false,
+    "mentionable": false,
+    "position": 60
+  },
+  {
+    "id": 1395784647371395166,
+    "name": "T-SGT | Terceiro Sargento",
+    "permissions": 594807977528897,
+    "color": 10038562,
+    "hoist": true,
+    "mentionable": false,
+    "position": 61
+  },
+  {
+    "id": 1395784647371395167,
+    "name": "S-SGT | Segundo Sargento",
+    "permissions": 0,
+    "color": 10038562,
+    "hoist": true,
+    "mentionable": false,
+    "position": 62
+  },
+  {
+    "id": 1395784647371395168,
+    "name": "P-SGT |  Primeiro Sargento",
+    "permissions": 594807977528897,
+    "color": 10038562,
+    "hoist": true,
+    "mentionable": false,
+    "position": 63
+  },
+  {
+    "id": 1395784647371395169,
+    "name": "SUB-TNT | Sub Tenente",
+    "permissions": 594807977528897,
+    "color": 10038562,
+    "hoist": true,
+    "mentionable": false,
+    "position": 64
+  },
+  {
+    "id": 1395784647371395170,
+    "name": "⎾Graduados⏌",
+    "permissions": 469762048,
+    "color": 15158332,
+    "hoist": false,
+    "mentionable": false,
+    "position": 65
+  },
+  {
+    "id": 1395784647371395171,
+    "name": "RONE  |  Oficialato da Rondas Ostensivas de Natureza Especial",
+    "permissions": 281475446472704,
+    "color": 6692375,
+    "hoist": false,
+    "mentionable": false,
+    "position": 66
+  },
+  {
+    "id": 1395784647472054272,
+    "name": "AAO | Aspirante à Oficial",
+    "permissions": 2073651540647505,
+    "color": 12745742,
+    "hoist": true,
+    "mentionable": false,
+    "position": 67
+  },
+  {
+    "id": 1395784647472054273,
+    "name": "S-TNT | Segundo Tenente",
+    "permissions": 31858024107585,
+    "color": 12745742,
+    "hoist": true,
+    "mentionable": false,
+    "position": 68
+  },
+  {
+    "id": 1395784647472054274,
+    "name": "P-TNT | Primeiro Tenente",
+    "permissions": 31858426760785,
+    "color": 12745742,
+    "hoist": true,
+    "mentionable": false,
+    "position": 69
+  },
+  {
+    "id": 1395784647472054275,
+    "name": "⎾Oficiais Subalternos⏌",
+    "permissions": 380403533078097,
+    "color": 15844367,
+    "hoist": false,
+    "mentionable": false,
+    "position": 70
+  },
+  {
+    "id": 1395784647472054276,
+    "name": "CAP | Capitão",
+    "permissions": 31858443537985,
+    "color": 12745742,
+    "hoist": true,
+    "mentionable": false,
+    "position": 71
+  },
+  {
+    "id": 1395784647472054277,
+    "name": "⎾Oficiais Intermediários⏌",
+    "permissions": 0,
+    "color": 15844367,
+    "hoist": false,
+    "mentionable": false,
+    "position": 72
+  },
+  {
+    "id": 1395784647472054278,
+    "name": "MAJ | Major",
+    "permissions": 31859366284881,
+    "color": 10038562,
+    "hoist": true,
+    "mentionable": false,
+    "position": 73
+  },
+  {
+    "id": 1395784647472054279,
+    "name": "TNT-CEL | Tenente Coronel",
+    "permissions": 349644160626647,
+    "color": 10038562,
+    "hoist": true,
+    "mentionable": false,
+    "position": 74
+  },
+  {
+    "id": 1395784647472054280,
+    "name": "CEL | Coronel",
+    "permissions": 982963395231703,
+    "color": 10038562,
+    "hoist": true,
+    "mentionable": false,
+    "position": 75
+  },
+  {
+    "id": 1395784647472054281,
+    "name": "⎾Oficiais Superiores⏌",
+    "permissions": 0,
+    "color": 15158332,
+    "hoist": false,
+    "mentionable": false,
+    "position": 76
+  },
+  {
+    "id": 1395784647484375200,
+    "name": "──────▸⎾Patente⏌◂───────",
+    "permissions": 0,
+    "color": 16777215,
+    "hoist": false,
+    "mentionable": false,
+    "position": 77
+  },
+  {
+    "id": 1395784647484375201,
+    "name": "「CRRG-I」Corregedoria Inferior",
+    "permissions": 1721826619162615,
+    "color": 3447003,
+    "hoist": true,
+    "mentionable": false,
+    "position": 78
+  },
+  {
+    "id": 1395784647484375202,
+    "name": "「CRRG-S」Corregedoria Superior",
+    "permissions": 1721807828152287,
+    "color": 3447003,
+    "hoist": true,
+    "mentionable": false,
+    "position": 79
+  },
+  {
+    "id": 1395784647484375203,
+    "name": "──────▸⎾Corregedoria⏌◂───────",
+    "permissions": 0,
+    "color": 3447003,
+    "hoist": false,
+    "mentionable": false,
+    "position": 80
+  },
+  {
+    "id": 1395784647484375204,
+    "name": "Sub-comandante da Rondas Ostensivas de Natureza Especial",
+    "permissions": 420012904939519,
+    "color": 1118481,
+    "hoist": true,
+    "mentionable": false,
+    "position": 81
+  },
+  {
+    "id": 1395784647484375205,
+    "name": "Administrador (Não dê esse cargo sem permissão!)",
+    "permissions": 0,
+    "color": 1118224,
+    "hoist": false,
+    "mentionable": false,
+    "position": 82
+  },
+  {
+    "id": 1395784647484375206,
+    "name": "Comandante da Rondas Ostensivas de Natureza Especial",
+    "permissions": 420012904415169,
+    "color": 1447189,
+    "hoist": true,
+    "mentionable": false,
+    "position": 83
+  },
+  {
+    "id": 1395784647484375207,
+    "name": "──────▸⎾Alto Escalão Superior⏌◂───────",
+    "permissions": 1100010882434,
+    "color": 0,
+    "hoist": false,
+    "mentionable": false,
+    "position": 84
+  }
+]
