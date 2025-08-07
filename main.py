@@ -126,69 +126,47 @@ async def verhorarios(interaction: discord.Interaction):
 @bot.tree.command(name="ponto", description="Adiciona um ponto a um usuário.")
 @app_commands.describe(usuario="Mencione o usuário", motivo="Motivo da advertência")
 async def ponto(interaction: discord.Interaction, usuario: discord.User, motivo: str):
-                        if not somente_dono_slash(interaction):
-                            await interaction.response.send_message("❌ Você não tem permissão para usar este comando.", ephemeral=True)
-                            return
+        if not somente_dono_slash(interaction):
+            await interaction.response.send_message("❌ Você não tem permissão para usar este comando.", ephemeral=True)
+            return
 
-                        user_id = str(usuario.id)
-                        if user_id not in pontos:
-                            pontos[user_id] = []
-                        pontos[user_id].append(motivo)
+        user_id = str(usuario.id)
+        if user_id not in pontos:
+            pontos[user_id] = []
+        pontos[user_id].append(motivo)
+        salvar_json(ARQUIVO_PONTOS, pontos)  # SALVA OS PONTOS!
 
-                        # Enviar mensagem privada para o usuário
-                        try:
-                            await usuario.send(f"⚠️ Você acabou de receber uma advertência na equipe.\n**Motivo:** {motivo}")
-                        except:
-                            await interaction.response.send_message("⚠️ Não foi possível enviar DM para o usuário.", ephemeral=True)
-                            return
+        # Tenta avisar por DM
+        try:
+            await usuario.send(f"⚠️ Você recebeu uma advertência.\n**Motivo:** {motivo}")
+        except discord.Forbidden:
+            await interaction.response.send_message("⚠️ Não foi possível enviar DM para o usuário.", ephemeral=True)
+            return
 
-                        await interaction.response.send_message(f"✅ {usuario.mention} recebeu um ponto por: **{motivo}**", ephemeral=False)
+        await interaction.response.send_message(f"✅ {usuario.mention} recebeu um ponto por: **{motivo}**", ephemeral=False)
 
-                    # Comando para ver todos os pontos
-                    @bot.tree.command(name="verpontos", description="Mostra todos os pontos registrados dos usuários.")
-                    async def verpontos(interaction: discord.Interaction):
-                        if not somente_dono_slash(interaction):
-                            await interaction.response.send_message("❌ Você não tem permissão para usar este comando.", ephemeral=True)
-                            return
-
-                        if not pontos:
-                            await interaction.response.send_message("📭 Nenhum ponto registrado até agora.", ephemeral=True)
-                            return
-
-                        mensagem = ""
-                        for user_id, motivos in pontos.items():
-                            try:
-                                user = await bot.fetch_user(int(user_id))
-                                mensagem += f"**{user.mention}**\n"
-                                for i, motivo in enumerate(motivos, start=1):
-                                    mensagem += f" {i}º ponto: {motivo}\n"
-                                mensagem += "\n"
-                            except:
-                                continue  # Pula usuários que não puderem ser encontrados
-
-                        await interaction.response.send_message(mensagem, ephemeral=False)
 
 @bot.tree.command(name="verpontos", description="Mostra todos os pontos registrados dos usuários.")
 async def verpontos(interaction: discord.Interaction):
-            if not somente_dono_slash(interaction):
-                return await interaction.response.send_message("❌ Você não tem permissão.", ephemeral=True)
+        if not somente_dono_slash(interaction):
+            return await interaction.response.send_message("❌ Você não tem permissão.", ephemeral=True)
 
-            if not pontos:
-                return await interaction.response.send_message("Nenhum ponto registrado ainda.", ephemeral=True)
+        if not pontos:
+            return await interaction.response.send_message("📭 Nenhum ponto registrado ainda.", ephemeral=True)
 
-            resultado = ""
+        mensagem = ""
+        for user_id, lista_pontos in pontos.items():
+            try:
+                user = await bot.fetch_user(int(user_id))
+                mensagem += f"**{user.mention}**\n"
+                for i, motivo in enumerate(lista_pontos, start=1):
+                    mensagem += f"{i}º ponto: {motivo}\n"
+                mensagem += "\n"
+            except Exception as e:
+                print(f"[Erro] Falha ao buscar usuário {user_id}: {e}")
+                continue
 
-            for user_id, lista_pontos in pontos.items():
-                try:
-                    user = await bot.fetch_user(int(user_id))
-                    resultado += f"\n{user.mention}\n"
-                    for i, motivo in enumerate(lista_pontos, start=1):
-                        resultado += f"{i}º ponto: {motivo}\n"
-                except Exception as e:
-                    print(f"Erro ao buscar usuário {user_id}: {e}")
-                    continue
-
-            await interaction.response.send_message(resultado, ephemeral=True)
+        await interaction.response.send_message(mensagem, ephemeral=False)
 
     # ------ COMANDOS PREFIXADOS ------ #
 @bot.command()
