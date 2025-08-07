@@ -150,17 +150,17 @@ async def ponto(interaction: discord.Interaction, usuario: discord.User, motivo:
 @bot.tree.command(name="removeponto", description="Remove 1 ponto do usuário.")
 @app_commands.describe(usuario="Usuário a remover ponto")
 async def removeponto(interaction: discord.Interaction, usuario: discord.User):
-        if not somente_dono_slash(interaction):
-            return await interaction.response.send_message("❌ Você não tem permissão.", ephemeral=True)
-        if str(usuario.id) in pontos and pontos[str(usuario.id)] > 0:
-            pontos[str(usuario.id)] -= 1
-            salvar_json(ARQUIVO_PONTOS, pontos)
-            await interaction.response.send_message(f"**{usuario.mention} agora tem {pontos[str(usuario.id)]} ponto(s).**", ephemeral=True)
-        else:
-            await interaction.response.send_message("❌ Este usuário não possui pontos.", ephemeral=True)
+                if not somente_dono_slash(interaction):
+                    return await interaction.response.send_message("❌ Você não tem permissão.", ephemeral=True)
+                if str(usuario.id) in pontos and pontos[str(usuario.id)] > 0:
+                    pontos[str(usuario.id)] -= 1
+                    salvar_json(ARQUIVO_PONTOS, pontos)
+                    await interaction.response.send_message(f"**{usuario.mention} agora tem {pontos[str(usuario.id)]} ponto(s).**", ephemeral=True)
+                else:
+                    await interaction.response.send_message("❌ Este usuário não possui pontos.", ephemeral=True)
 
-        @bot.tree.command(name="verpontos", description="Mostra todos os pontos registrados dos usuários.")
-        async def verpontos(interaction: discord.Interaction):
+@bot.tree.command(name="verpontos", description="Mostra todos os pontos registrados dos usuários.")
+async def verpontos(interaction: discord.Interaction):
             if not somente_dono_slash(interaction):
                 return await interaction.response.send_message("❌ Você não tem permissão.", ephemeral=True)
 
