@@ -3,11 +3,13 @@ import json
 import discord
 import pytz
 from flask import Flask
-from discord.ext import commands
+from discord.ext import commands, tasks
 from discord import app_commands
 from datetime import datetime
 import threading
 from typing import List, Dict
+from keep_alive import keep_alive
+keep_alive()
 
 # ------ CONFIGURAÇÕES ------ #
 CANAL_AVISO_ID = 1401207342913032383
@@ -21,13 +23,11 @@ TOKEN = os.getenv("TOKEN")
 if TOKEN is None:
     raise ValueError("Variável de ambiente TOKEN não definida.")
 
-ORIGEM_ID = 1395784646884855963  # ID do servidor de origem (recuperação)
-DESTINO_ID = 1273079912223342685  # ID do servidor de destino (novo)
+ORIGEM_ID = 1403152633228689448  # ID do servidor de origem (recuperação)
+DESTINO_ID = 1273079921018929222  # ID do servidor de destino (novo)
 
 CARGOS_EXCLUIDOS = {
-    1395784646884855963, 1395784646884855964, 1395785544339820607, 1395785854424977451,
-    1395786050223345727, 1395784647484375208, 1395784647484375209, 1395784647560138834,
-    1395784647560138835, 1395784647560138836
+    1403152633392398358, 1273079921161408679, 1403152633371295903, 1403152633371295902, 1403152633371295901, 1403155126746878024, 1403152633228689448
 }
 
 roles_backup: List[Dict] = []
@@ -197,6 +197,135 @@ async def removerallpontos(interaction: discord.Interaction, usuario: discord.Us
     pontos[user_id] = []
     salvar_json(ARQUIVO_PONTOS, pontos)
     await interaction.response.send_message(f"✅ Todos os pontos de {usuario.mention} foram removidos.", ephemeral=False)
+
+ # ------ COMANDOS PREFIXADOS ------ #
+@bot.command()
+@somente_dono_prefix()
+async def backup_roles(ctx):
+        origem = bot.get_guild(ORIGEM_ID)
+        if not origem:
+            await ctx.send("Servidor de origem não encontrado.")
+            return
+
+        roles_info = []
+        for role in origem.roles:
+            if role.name != "@everyone" and role.id not in CARGOS_EXCLUIDOS:
+                roles_info.append({
+                    "id": role.id,
+                    "name": role.name,
+                    "permissions": role.permissions.value,
+                    "color": role.color.value,
+                    "hoist": role.hoist,
+                    "mentionable": role.mentionable,
+                    "position": role.position
+                })
+
+        global roles_backup
+        roles_backup = roles_info
+        await ctx.send(f"Backup de {len(roles_info)} cargos realizado com sucesso!")
+
+@bot.command()
+@somente_dono_prefix()
+async def restaurar_roles(ctx):
+        destino = bot.get_guild(DESTINO_ID)
+        if not destino:
+            await ctx.send("Servidor de destino não encontrado.")
+            return
+
+        if not roles_backup:
+            await ctx.send("Nenhum backup encontrado. Use !backup_roles primeiro.")
+            return
+
+        # Ordem invertida para criar cargos do topo para baixo (posição maior primeiro)
+        for role_info in sorted(roles_backup, key=lambda x: x["position"], reverse=True):
+            await destino.create_role(
+                name=role_info["name"],
+                permissions=discord.Permissions(role_info["permissions"]),
+                color=discord.Color(role_info["color"]),
+                hoist=role_info["hoist"],
+                mentionable=role_info["mentionable"]
+            )
+
+        await ctx.send(f"Restauração de {len(roles_backup)} cargos concluída com sucesso!")
+
+    # -------- NOVO COMANDO: COPIAR PERMISSÕES DOS CANAIS -------- #
+@bot.command()
+@somente_dono_prefix()
+async def copiar_completo(ctx):
+        origem = bot.get_guild(ORIGEM_ID)
+        destino = bot.get_guild(DESTINO_ID)
+
+        if not origem:
+            await ctx.send("Servidor de origem não encontrado.")
+            return
+        if not destino:
+            await ctx.send("Servidor de destino não encontrado.")
+            return
+
+        # Dicionário para pegar roles do destino pelo nome
+        destino_roles = {role.name: role for role in destino.roles}
+
+        count = 0
+        for canal_origem in origem.channels:
+            if not isinstance(canal_origem, (discord.TextChannel, discord.VoiceChannel, discord.CategoryChannel)):
+                continue
+            canal_destino = discord.utils.get(destino.channels, name=canal_origem.name, type=canal_origem.type)
+            if not canal_destino:
+                continue
+
+            # Montar novo overwrites baseado nos cargos do destino, pelo nome, com as mesmas permissões do canal origem
+            novos_overwrites = {}
+            for role_origem, overwrite in canal_origem.overwrites.items():
+                if isinstance(role_origem, discord.Role):
+                    role_destino = destino_roles.get(role_origem.name)
+                    if role_destino:
+                        novos_overwrites[role_destino] = overwrite
+
+            # Editar canal destino com os overwrites novos
+            try:
+                await canal_destino.edit(overwrites=novos_overwrites)
+                count += 1
+            except Exception as e:
+                await ctx.send(f"Erro ao editar canal {canal_destino.name}: {e}")
+
+        await ctx.send(f"Permissões copiadas para {count} canais do servidor destino.")
+
+ # ------ VERIFICAÇÃO DE STATUS ------ #
+@tasks.loop(minutes=1)
+async def checar_horarios():
+        agora_utc = datetime.now(pytz.UTC)
+        canal = bot.get_channel(CANAL_AVISO_ID)
+        if not isinstance(canal, discord.TextChannel):
+            return
+
+        for horario, info in horarios.items():
+            try:
+                fuso = pytz.timezone(info["fuso"])
+                alvo = datetime.strptime(horario, "%H:%M").time()
+                local = agora_utc.astimezone(fuso)
+                if local.hour == alvo.hour and local.minute == alvo.minute:
+                    responsavel_id = info.get("responsavel")
+                    if responsavel_id:
+                        membro = await bot.fetch_user(responsavel_id)
+                        await canal.send(f"**🔔 {membro.mention}, chegou seu horário de responsabilidade: {horario}.**")
+                        pending_checks[responsavel_id] = datetime.now()
+            except Exception as e:
+                print(f"Erro ao checar horário {horario}: {e}")
+
+        for user_id, horario_inicio in list(pending_checks.items()):
+            if (datetime.now() - horario_inicio).seconds >= 600:
+                membro = await bot.fetch_user(user_id)
+                logs = []
+                for canal_id in [CANAL_STATUS_FAC_ID, CANAL_STATUS_CORP_ID, CANAL_JUSTIFICATIVA_ID]:
+                    canal = bot.get_channel(canal_id)
+                    if isinstance(canal, discord.TextChannel):
+                        async for msg in canal.history(limit=50):
+                            if msg.author.id == user_id:
+                                logs.append(msg)
+                if not logs:
+                    dono = await bot.fetch_user(DONO_ID)
+                    await dono.send(f"**@{membro} não realizou o Status e não se justificou.**\n**Canal status fac:** <#{CANAL_STATUS_FAC_ID}>\n**Canal status corp:** <#{CANAL_STATUS_CORP_ID}>")
+                pending_checks.pop(user_id)
 
 # ------ EVENTOS ------ #
 
