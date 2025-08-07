@@ -159,23 +159,27 @@ async def removeponto(interaction: discord.Interaction, usuario: discord.User):
         else:
             await interaction.response.send_message("❌ Este usuário não possui pontos.", ephemeral=True)
 
-@bot.tree.command(name="verpontos", description="Mostra os pontos e motivos de todos os usuários.")
-async def verpontos(interaction: discord.Interaction):
-    if not somente_dono_slash(interaction):
-        return await interaction.response.send_message("❌ Você não tem permissão.", ephemeral=True)
+        @bot.tree.command(name="verpontos", description="Mostra todos os pontos registrados dos usuários.")
+        async def verpontos(interaction: discord.Interaction):
+            if not somente_dono_slash(interaction):
+                return await interaction.response.send_message("❌ Você não tem permissão.", ephemeral=True)
 
-    if not pontos:
-        return await interaction.response.send_message("📋 Nenhum ponto registrado.", ephemeral=True)
+            if not pontos:
+                return await interaction.response.send_message("Nenhum ponto registrado ainda.", ephemeral=True)
 
-    mensagem = "**📋 Pontos e advertências da equipe:**\n"
-    for user_id, motivos in pontos.items():
-        membro = await bot.fetch_user(int(user_id))
-        mensagem += f"\n{membro.mention}"
-        for i, motivo in enumerate(motivos, start=1):
-            mensagem += f"\n{i}º ponto: {motivo}"
-        mensagem += "\n"
+            resultado = ""
 
-    await interaction.response.send_message(mensagem, ephemeral=True)
+            for user_id, lista_pontos in pontos.items():
+                try:
+                    user = await bot.fetch_user(int(user_id))
+                    resultado += f"\n{user.mention}\n"
+                    for i, motivo in enumerate(lista_pontos, start=1):
+                        resultado += f"{i}º ponto: {motivo}\n"
+                except Exception as e:
+                    print(f"Erro ao buscar usuário {user_id}: {e}")
+                    continue
+
+            await interaction.response.send_message(resultado, ephemeral=True)
 
     # ------ COMANDOS PREFIXADOS ------ #
 @bot.command()
