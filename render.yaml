@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: seu-nome-do-bot
+    name: meu-bot-discord
     env: python
     plan: free
     buildCommand: "pip install -r requirements.txt"
