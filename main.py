@@ -3,7 +3,7 @@ import json
 import discord
 import pytz
 from flask import Flask
-from discord.ext import commands, tasks
+from discord.ext import commands
 from discord import app_commands
 from datetime import datetime
 import threading
@@ -21,12 +21,12 @@ TOKEN = os.getenv("TOKEN")
 if TOKEN is None:
     raise ValueError("Variável de ambiente TOKEN não definida.")
 
-ORIGEM_ID = 1395784646884855963
-DESTINO_ID = 1273079912223342685
+ORIGEM_ID = 1395784646884855963  # ID do servidor de origem (recuperação)
+DESTINO_ID = 1273079912223342685  # ID do servidor de destino (novo)
 
 CARGOS_EXCLUIDOS = {
-    1395784646884855963, 1395784646884855964, 1395785544339820607, 1395785854424977451, 
-    1395786050223345727, 1395784647484375208, 1395784647484375209, 1395784647560138834, 
+    1395784646884855963, 1395784646884855964, 1395785544339820607, 1395785854424977451,
+    1395786050223345727, 1395784647484375208, 1395784647484375209, 1395784647560138834,
     1395784647560138835, 1395784647560138836
 }
 
@@ -34,9 +34,11 @@ roles_backup: List[Dict] = []
 
 # ------ FLASK PARA UPTIME ROBOT ------ #
 app = Flask(__name__)
+
 @app.route('/')
 def home():
     return "Bot online!"
+
 threading.Thread(target=app.run, kwargs={"host": "0.0.0.0", "port": 8080}).start()
 
 # ------ INTENTS E BOT ------ #
@@ -69,6 +71,7 @@ pontos = carregar_json(ARQUIVO_PONTOS)
 pending_checks = {}
 
 # ------ COMANDOS SLASH ------ #
+
 @bot.tree.command(name="addhorario", description="Adiciona um novo horário.")
 @app_commands.describe(horario="Formato HH:MM", fuso="Ex: America/Sao_Paulo")
 async def addhorario(interaction: discord.Interaction, horario: str, fuso: str):
@@ -114,24 +117,26 @@ async def verhorarios(interaction: discord.Interaction):
     if not somente_dono_slash(interaction):
         return await interaction.response.send_message("❌ Você não tem permissão.", ephemeral=True)
     if not horarios:
-        return await interaction.response.send_message("📋 Nenhum horário cadastrado.", ephemeral=True)
-    msg = "📅 **Horários configurados:**\n"
-    for h, info in sorted(horarios.items()):
-        user = f"<@{info['responsavel']}>" if info["responsavel"] else "N/A"
-        msg += f"\n🕐 `{h}` | 🌐 `{info['fuso']}` | 👤 {user}"
+        return await interaction.response.send_message("Nenhum horário configurado.", ephemeral=True)
+    msg = ""
+    for h, dados in horarios.items():
+        resp = f"<@{dados['responsavel']}>" if dados['responsavel'] else "Nenhum"
+        msg += f"**{h} ({dados['fuso']}):** {resp}\n"
     await interaction.response.send_message(msg, ephemeral=True)
 
 @bot.tree.command(name="ponto", description="Adiciona um ponto a um usuário.")
 @app_commands.describe(usuario="Mencione o usuário", motivo="Motivo da advertência")
 async def ponto(interaction: discord.Interaction, usuario: discord.User, motivo: str):
     if not somente_dono_slash(interaction):
-        await interaction.response.send_message("❌ Você não tem permissão.", ephemeral=True)
+        await interaction.response.send_message("❌ Você não tem permissão para usar este comando.", ephemeral=True)
         return
 
     user_id = str(usuario.id)
 
+    # Corrige estrutura antiga (int) para nova (lista)
     if isinstance(pontos.get(user_id), int):
         pontos[user_id] = [f"Ponto antigo {i+1}" for i in range(pontos[user_id])]
+
     if user_id not in pontos:
         pontos[user_id] = []
 
@@ -140,11 +145,13 @@ async def ponto(interaction: discord.Interaction, usuario: discord.User, motivo:
 
     try:
         await usuario.send(
-            f"**Você acabou de receber uma advertência.\nMotivo: {motivo}**\n***Caso queira revoga-la, contate o <@{DONO_ID}>***"
+            f"**Você acabou de receber uma advertência.**\n"
+            f"Motivo: {motivo}\n"
+            f"***Caso queira revogá-la, contate o <@{DONO_ID}>***"
         )
     except (discord.Forbidden, discord.HTTPException):
         await interaction.response.send_message(
-            f"⚠️ {usuario.mention} recebeu uma advertência, mas não foi possível enviar DM.",
+            f"⚠️ {usuario.mention} recebeu uma advertência por: **{motivo}**, mas não foi possível enviar DM.",
             ephemeral=False
         )
         return
@@ -154,105 +161,54 @@ async def ponto(interaction: discord.Interaction, usuario: discord.User, motivo:
         ephemeral=False
     )
 
-@bot.tree.command(name="verpontos", description="Mostra todos os pontos registrados dos usuários.")
-async def verpontos(interaction: discord.Interaction):
+    # Aviso se chegar a 3 pontos
+    if len(pontos[user_id]) == 3:
+        await interaction.followup.send(
+            f"⚠️ {usuario.mention} agora tem 3 advertências!",
+            ephemeral=False
+        )
+
+@bot.tree.command(name="removerpontos", description="Remove um ponto de um usuário.")
+@app_commands.describe(usuario="Usuário", quantidade="Quantidade de pontos a remover")
+async def removerpontos(interaction: discord.Interaction, usuario: discord.User, quantidade: int = 1):
     if not somente_dono_slash(interaction):
         return await interaction.response.send_message("❌ Você não tem permissão.", ephemeral=True)
-    if not pontos:
-        return await interaction.response.send_message("📭 Nenhum ponto registrado ainda.", ephemeral=True)
-
-    mensagem = ""
-    for user_id, lista_pontos in pontos.items():
-        try:
-            user = await bot.fetch_user(int(user_id))
-            mensagem += f"**{user.mention}**\n"
-            for i, motivo in enumerate(lista_pontos, start=1):
-                mensagem += f"{i}º ponto: {motivo}\n"
-            mensagem += "\n"
-        except Exception as e:
-            print(f"[Erro] Falha ao buscar usuário {user_id}: {e}")
-            continue
-
-    await interaction.response.send_message(mensagem, ephemeral=False)
-
-@bot.tree.command(name="removerponto", description="Remove um ponto específico de um usuário.")
-@app_commands.describe(usuario="Usuário", numero="Número do ponto (1, 2, 3...)")
-async def removerponto(interaction: discord.Interaction, usuario: discord.User, numero: int):
-    if not somente_dono_slash(interaction):
-        await interaction.response.send_message("❌ Você não tem permissão.", ephemeral=True)
-        return
 
     user_id = str(usuario.id)
-    if user_id not in pontos or numero < 1 or numero > len(pontos[user_id]):
-        await interaction.response.send_message("❌ Ponto não encontrado.", ephemeral=True)
-        return
+    if user_id not in pontos or len(pontos[user_id]) == 0:
+        return await interaction.response.send_message(f"❌ {usuario.mention} não possui pontos.", ephemeral=True)
 
-    removido = pontos[user_id].pop(numero - 1)
-    if not pontos[user_id]:
-        pontos.pop(user_id)
+    quantidade = max(1, quantidade)
+    pontos[user_id] = pontos[user_id][:-quantidade] if len(pontos[user_id]) >= quantidade else []
 
     salvar_json(ARQUIVO_PONTOS, pontos)
-    await interaction.response.send_message(f"✅ Ponto removido de {usuario.mention}: **{removido}**", ephemeral=False)
+    await interaction.response.send_message(f"✅ Removidos {quantidade} ponto(s) de {usuario.mention}.", ephemeral=False)
 
 @bot.tree.command(name="removerallpontos", description="Remove todos os pontos de um usuário.")
 @app_commands.describe(usuario="Usuário")
 async def removerallpontos(interaction: discord.Interaction, usuario: discord.User):
     if not somente_dono_slash(interaction):
-        await interaction.response.send_message("❌ Você não tem permissão.", ephemeral=True)
-        return
+        return await interaction.response.send_message("❌ Você não tem permissão.", ephemeral=True)
 
     user_id = str(usuario.id)
-    if user_id not in pontos:
-        await interaction.response.send_message("❌ Este usuário não possui pontos.", ephemeral=True)
-        return
+    if user_id not in pontos or len(pontos[user_id]) == 0:
+        return await interaction.response.send_message(f"❌ {usuario.mention} não possui pontos.", ephemeral=True)
 
-    pontos.pop(user_id)
+    pontos[user_id] = []
     salvar_json(ARQUIVO_PONTOS, pontos)
     await interaction.response.send_message(f"✅ Todos os pontos de {usuario.mention} foram removidos.", ephemeral=False)
 
-# ------ EVENTOS E BACKUP ------ #
+# ------ EVENTOS ------ #
+
 @bot.event
 async def on_ready():
-    try:
-        synced = await bot.tree.sync()
-        print(f"Slash commands sincronizados: {len(synced)}")
-    except Exception as e:
-        print(f"Erro na sincronização: {e}")
-    checar_horarios.start()
-    print(f"Bot online! Logado como {bot.user}.")
+    user = bot.user
+    if user:
+        print(f"Bot conectado como {user} (ID: {user.id})")
+    else:
+        print("Bot conectado, mas bot.user ainda é None")
+    await bot.tree.sync()
+    print("Comandos slash sincronizados.")
 
-@tasks.loop(minutes=1)
-async def checar_horarios():
-    agora_utc = datetime.now(pytz.UTC)
-    canal = bot.get_channel(CANAL_AVISO_ID)
-    if not isinstance(canal, discord.TextChannel):
-        return
-    for horario, info in horarios.items():
-        try:
-            fuso = pytz.timezone(info["fuso"])
-            alvo = datetime.strptime(horario, "%H:%M").time()
-            local = agora_utc.astimezone(fuso)
-            if local.hour == alvo.hour and local.minute == alvo.minute:
-                responsavel_id = info.get("responsavel")
-                if responsavel_id:
-                    membro = await bot.fetch_user(responsavel_id)
-                    await canal.send(f"**🔔 {membro.mention}, chegou seu horário de responsabilidade: `{horario}`.**")
-                    pending_checks[responsavel_id] = datetime.now()
-        except Exception as e:
-            print(f"Erro ao checar horário {horario}: {e}")
-    for user_id, horario_inicio in list(pending_checks.items()):
-        if (datetime.now() - horario_inicio).seconds >= 600:
-            membro = await bot.fetch_user(user_id)
-            logs = []
-            for canal_id in [CANAL_STATUS_FAC_ID, CANAL_STATUS_CORP_ID, CANAL_JUSTIFICATIVA_ID]:
-                canal = bot.get_channel(canal_id)
-                if isinstance(canal, discord.TextChannel):
-                    async for msg in canal.history(limit=50):
-                        if msg.author.id == user_id:
-                            logs.append(msg)
-            if not logs:
-                dono = await bot.fetch_user(DONO_ID)
-                await dono.send(f"**@{membro} não realizou o Status e não se justificou.**\n**Canal status fac:** <#{CANAL_STATUS_FAC_ID}>\n**Canal status corp:** <#{CANAL_STATUS_CORP_ID}>")
-            pending_checks.pop(user_id)
-
+# ------ RODAR BOT ------ #
 bot.run(TOKEN)
