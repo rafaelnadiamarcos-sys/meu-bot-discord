@@ -293,39 +293,43 @@ async def copiar_completo(ctx):
  # ------ VERIFICAÇÃO DE STATUS ------ #
 @tasks.loop(minutes=1)
 async def checar_horarios():
-        agora_utc = datetime.now(pytz.UTC)
-        canal = bot.get_channel(CANAL_AVISO_ID)
-        if not isinstance(canal, discord.TextChannel):
-            return
+                agora_utc = datetime.now(pytz.UTC)
+                canal = bot.get_channel(CANAL_AVISO_ID)
+                if not isinstance(canal, discord.TextChannel):
+                    return
 
-        for horario, info in horarios.items():
-            try:
-                fuso = pytz.timezone(info["fuso"])
-                alvo = datetime.strptime(horario, "%H:%M").time()
-                local = agora_utc.astimezone(fuso)
-                if local.hour == alvo.hour and local.minute == alvo.minute:
-                    responsavel_id = info.get("responsavel")
-                    if responsavel_id:
-                        membro = await bot.fetch_user(responsavel_id)
-                        await canal.send(f"**🔔 {membro.mention}, chegou seu horário de responsabilidade: {horario}.**")
-                        pending_checks[responsavel_id] = datetime.now()
-            except Exception as e:
-                print(f"Erro ao checar horário {horario}: {e}")
+                for horario, info in horarios.items():
+                    try:
+                        fuso = pytz.timezone(info["fuso"])
+                        alvo = datetime.strptime(horario, "%H:%M").time()
+                        local = agora_utc.astimezone(fuso)
+                        if local.hour == alvo.hour and local.minute == alvo.minute:
+                            responsavel_id = info.get("responsavel")
+                            if responsavel_id:
+                                membro = await bot.fetch_user(responsavel_id)
+                                await canal.send(f"**🔔 {membro.mention}, chegou seu horário de responsabilidade: {horario}.**")
+                                pending_checks[responsavel_id] = datetime.now(pytz.UTC)
+                    except Exception as e:
+                        print(f"Erro ao checar horário {horario}: {e}")
 
-        for user_id, horario_inicio in list(pending_checks.items()):
-            if (datetime.now() - horario_inicio).seconds >= 600:
-                membro = await bot.fetch_user(user_id)
-                logs = []
-                for canal_id in [CANAL_STATUS_FAC_ID, CANAL_STATUS_CORP_ID, CANAL_JUSTIFICATIVA_ID]:
-                    canal = bot.get_channel(canal_id)
-                    if isinstance(canal, discord.TextChannel):
-                        async for msg in canal.history(limit=50):
-                            if msg.author.id == user_id:
-                                logs.append(msg)
-                if not logs:
-                    dono = await bot.fetch_user(DONO_ID)
-                    await dono.send(f"**@{membro} não realizou o Status e não se justificou.**\n**Canal status fac:** <#{CANAL_STATUS_FAC_ID}>\n**Canal status corp:** <#{CANAL_STATUS_CORP_ID}>")
-                pending_checks.pop(user_id)
+                for user_id, horario_inicio in list(pending_checks.items()):
+                    if (datetime.now(pytz.UTC) - horario_inicio).seconds >= 600:
+                        membro = await bot.fetch_user(user_id)
+                        logs = []
+                        for canal_id in [CANAL_STATUS_FAC_ID, CANAL_STATUS_CORP_ID, CANAL_JUSTIFICATIVA_ID]:
+                            canal = bot.get_channel(canal_id)
+                            if isinstance(canal, discord.TextChannel):
+                                async for msg in canal.history(limit=50):
+                                    if msg.author.id == user_id:
+                                        logs.append(msg)
+                        if not logs:
+                            dono = await bot.fetch_user(DONO_ID)
+                            await dono.send(
+                                f"**@{membro} não realizou o Status e não se justificou.**\n"
+                                f"**Canal status fac:** <#{CANAL_STATUS_FAC_ID}>\n"
+                                f"**Canal status corp:** <#{CANAL_STATUS_CORP_ID}>"
+                            )
+                        pending_checks.pop(user_id)
 
 # ------ EVENTOS ------ #
 
@@ -338,6 +342,7 @@ async def on_ready():
         print("Bot conectado, mas bot.user ainda é None")
     await bot.tree.sync()
     print("Comandos slash sincronizados.")
+    checar_horarios.start()
 
 # ------ RODAR BOT ------ #
 bot.run(TOKEN)
